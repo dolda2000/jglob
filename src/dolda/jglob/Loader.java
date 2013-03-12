@@ -8,7 +8,6 @@ import java.lang.annotation.*;
 public class Loader {
     private final Class<? extends Annotation> an;
     private final ClassLoader cl;
-    private final Map<Class<?>, Object> instances = new HashMap<Class<?>, Object>();
 
     private Loader(Class<? extends Annotation> annotation, ClassLoader loader) {
 	this.an = annotation;
@@ -113,21 +112,21 @@ public class Loader {
 	    });
     }
 
-    public Iterable<?> instances() {
-	return(new Iterable<Object>() {
-		public Iterator<Object> iterator() {
-		    return(new Iterator<Object>() {
+    public <T> Iterable<T> instances(final Class<T> cast) {
+	return(new Iterable<T>() {
+		public Iterator<T> iterator() {
+		    return(new Iterator<T>() {
 			    private final Iterator<Class<?>> classes = classes().iterator();
-			    private Object n = null;
+			    private T n = null;
 
 			    public boolean hasNext() {
 				while(n == null) {
 				    if(!classes.hasNext())
 					return(false);
 				    Class<?> cl = classes.next();
-				    Object inst;
+				    T inst;
 				    try {
-					inst = cl.newInstance();
+					inst = cast.cast(cl.newInstance());
 				    } catch(InstantiationException e) {
 					throw(new GlobInstantiationException(e));
 				    } catch(IllegalAccessException e) {
@@ -138,10 +137,10 @@ public class Loader {
 				return(true);
 			    }
 
-			    public Object next() {
+			    public T next() {
 				if(!hasNext())
 				    throw(new NoSuchElementException());
-				Object r = n;
+				T r = n;
 				n = null;
 				return(r);
 			    }
@@ -150,6 +149,10 @@ public class Loader {
 			});
 		}
 	    });
+    }
+
+    public Iterable<?> instances() {
+	return(instances(Object.class));
     }
 
     public static Loader get(Class<? extends Annotation> annotation, ClassLoader loader) {
