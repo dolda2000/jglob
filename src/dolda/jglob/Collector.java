@@ -13,6 +13,7 @@ import javax.lang.model.util.*;
 public class Collector extends AbstractProcessor {
     private ProcessingEnvironment cfg;
     private Elements eu;
+    private boolean verbose = false;
 
     public void init(ProcessingEnvironment cfg) {
 	this.cfg = cfg;
@@ -76,7 +77,7 @@ public class Collector extends AbstractProcessor {
 	    }
 	    TypeElement type = (TypeElement)e;
 	    String nm = tn(type);
-	    if(!prev.contains(nm))
+	    if(!prev.contains(nm) && verbose)
 		cfg.getMessager().printMessage(Diagnostic.Kind.NOTE, "added " + nm, type);
 	    found.add(nm);
 	    carry.remove(nm);
@@ -86,7 +87,8 @@ public class Collector extends AbstractProcessor {
 	    TypeElement el = types.get(nm);
 	    if(el != null) {
 		i.remove();
-		cfg.getMessager().printMessage(Diagnostic.Kind.NOTE, "removed " + nm, el);
+		if(verbose)
+		    cfg.getMessager().printMessage(Diagnostic.Kind.NOTE, "removed " + nm, el);
 	    }
 	}
 	List<String> all = new ArrayList<String>();
