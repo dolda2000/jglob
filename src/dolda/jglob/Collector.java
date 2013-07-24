@@ -9,7 +9,6 @@ import javax.lang.model.element.*;
 import javax.lang.model.util.*;
 
 @SupportedAnnotationTypes({"*"})
-@SupportedSourceVersion(SourceVersion.RELEASE_5)
 public class Collector extends AbstractProcessor {
     private ProcessingEnvironment cfg;
     private Elements eu;
@@ -104,5 +103,9 @@ public class Collector extends AbstractProcessor {
 		process(a, round, new TypeMap(round.getRootElements(), eu));
 	}
 	return(false);
+    }
+
+    public SourceVersion getSupportedSourceVersion() {
+	return(SourceVersion.latest());
     }
 }
