@@ -2,6 +2,7 @@ package dolda.jglob;
 
 import java.util.*;
 import java.io.*;
+import java.nio.file.*;
 import javax.annotation.processing.*;
 import javax.tools.*;
 import javax.lang.model.*;
@@ -30,7 +31,7 @@ public class Collector extends AbstractProcessor {
 	    InputStream in;
 	    try {
 		in = lf.openInputStream();
-	    } catch(FileNotFoundException e) {
+	    } catch(FileNotFoundException | NoSuchFileException e) {
 		return(prev);
 	    }
 	    try {
