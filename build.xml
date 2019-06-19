@@ -8,7 +8,7 @@
   
   <target name="classes" depends="build-env">
     <javac srcdir="src" destdir="build/classes" debug="on"
-	   source="1.5" target="1.5" includeantruntime="no">
+	   source="1.7" target="1.7" includeantruntime="no">
       <!-- <compilerarg value="-Xbarda" /> -->
     </javac>
   </target>
